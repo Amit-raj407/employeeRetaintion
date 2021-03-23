@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Turnover Prediction</title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styles.css') }}">
+
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+  
+</head>
+<body>
+    <div class="bg-image"></div>
+    <div class="container mt-3">
+            <div class="card_m">
+                <div class="card-header"><h1>Employee Retention Prediction</h1></div>
+                <hr>
+                <div class="card-body">
+                    <form action="predict" method="POST" autocomplete="off">
+                        <!-- ROW 1 -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input class="form-control" type="text" name="Name" id="" placeholder="Name of the Employee.." required>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <input class="form-control" type="text" name="salary" id="" placeholder="Enter Salary.." required>
+                            </div>
+                        </div>
+
+                        <!-- ROW 2 -->
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="Satisfaction">Satisfaction Level</label><br>
+                                <input type="range" value="0" name="satisfaction_level" id="Satisfaction" aria-describedby="basic-addon1" onchange="updateSatisfaction(this.value);">
+                                <span class="input-group-text range-span" id="basic-addon1">0</span>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="LastEvaluation">Last Evaluation</label><br>
+                                <input type="range" value="0" name="last_evaluation" id="LastEvaluation" aria-describedby="basic-addon2" onchange="updateEvaluation(this.value);">
+                                <span class="input-group-text range-span" id="basic-addon2">0</span>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <input class="form-control" type="number" name="number_project" id="" placeholder="Number of Projects.." required>
+                            </div>
+                        </div>
+                        <hr>
+
+                        <!-- ROW 3 -->
+                        <div class="row">
+                            <div class="col-md-4" id="dropdown">
+                                <select class="form-select" name="department" aria-label="Default select example" required>
+                                    <option selected disabled value="None">Select Department</option>
+                                    <option value="sales">Sales</option>
+                                    <option value="accounting">Accounting</option>
+                                    <option value="hr">HR</option>
+                                    <option value="technical_it">Technical/IT</option>
+                                    <option value="support">Support</option>
+                                    <option value="management">Management</option>
+                                    <option value="product_mng">Product Manager</option>
+                                    <option value="marketing">Marketing</option>
+                                    <option value="RandD">Research & Development</option>
+                                  </select>
+                            </div>
+                            <div class="col-md-4">
+                                <input class="form-control" type="number" name="average_montly_hours" id="" placeholder="Average Monthly hours.." required>
+                            </div>
+                            <div class="col-md-4">
+                                <input class="form-control" type="number" name="time_spend_company" id="" placeholder="Time Spent in Company(in years)" required>
+                            </div>
+                        </div>
+
+                        <!-- ROW 4 -->
+                        <div class="row mt-3">
+                            <div class="col-md-4 row4">
+                                <label for="work_accident">Any Work Accident ?</label>
+                                <div id="work_accident">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="Work_accident" id="flexRadioDefault1" value="1">
+                                        <label class="form-check-label" for="flexRadioDefault1">
+                                          Yes
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="Work_accident" id="flexRadioDefault2" value="0">
+                                        <label class="form-check-label" for="flexRadioDefault2">
+                                          No
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 row4">
+                                <label for="promotion">Any Promotion in last 5yrs ?</label>
+                                <div id="promotion">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="promotion_last_5years" id="flexRadioDefault3" value="1">
+                                        <label class="form-check-label" for="flexRadioDefault3">
+                                          Yes
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="promotion_last_5years" id="flexRadioDefault4" value="0">
+                                        <label class="form-check-label" for="flexRadioDefault4">
+                                          No
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4"></div>
+                        </div>
+
+                        <!-- ROW 5 -->
+                        <div class="row mt-3 text-center">
+                            <div class="col-md-4"></div>
+                            <div class="col-md-4">
+                                <input type="submit" class="btn btn-dark btn-lg" value="Predict">
+                            </div>
+                            <div class="col-md-4"></div>
+                        </div>
+
+                        <!-- ROW 2
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="input-group mb-3">
+                                    <input id="rangeSlider" class="form-control" type="range" min="0" max="100" name="name_of_slider" aria-describedby="basic-addon2" onchange="updateTextInput(this.value);" />
+                                    <input type="text" class="form-control" placeholder="" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                                    <span class="input-group-text" id="basic-addon2">..</span>
+                                  </div>
+                            </div>
+                        </div> -->
+                    </form>
+                </div>
+            </div>  
+    </div> 
+    
+    <script>
+        function updateSatisfaction(val) {
+          document.getElementById('basic-addon1').innerHTML = val/100; 
+        }
+        function updateEvaluation(val) {
+          document.getElementById('basic-addon2').innerHTML = val/100; 
+        }
+    </script>
+</body>
+</html>
