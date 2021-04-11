@@ -1,15 +1,47 @@
-from flask import Flask, render_template, request
+import os
+from flask import Flask, render_template, request, redirect
 import numpy as np
 import _pickle as cPickle
 import json
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
+files = 'csv_files'
+app.config['UPLOAD_FOLDER'] = files
+ALLOWED_EXTENSIONS = {'csv','xls'}
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route("/")
 def hello():
+    return render_template('dashboard.html')
+
+@app.route("/index", methods=['GET','POST'])
+def index():
+    if request.method == 'POST':
+        pass
     return render_template('index.html')
 
+@app.route("/multiple", methods=['GET','POST'])
+def multiple():
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            # flash('No File Part')
+            return redirect(request.url)
+        f = request.files['file']
+        
+        if(f.filename == ''):
+            # flash("No Selected File")
+            return redirect(request.url)
+        
+        if f and allowed_file(f.filename):
+            filename = secure_filename(f.filename)
+            f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return "SUCCESS"
+    return render_template('multiple.html')
 
 def func():
     with open('model.pkl', 'rb') as f:
