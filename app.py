@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 files = 'csv_files'
 app.config['UPLOAD_FOLDER'] = files
-ALLOWED_EXTENSIONS = {'csv','xls'}
+ALLOWED_EXTENSIONS = {'csv','xls','xlsx'}
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -25,6 +25,37 @@ def index():
         pass
     return render_template('index.html')
 
+def func2():
+    dataset = pd.read_excel("./csv_files/book.xlsx")
+
+    dataset = dataset.rename(columns = {'sales':'department'})
+    dataset['department']=np.where(dataset['department'] =='IT', 'technical', dataset['department'])
+    dataset = pd.get_dummies(dataset, columns = ['department', 'salary'])
+
+    cols = ['satisfaction_level', 'Work_accident', 'promotion_last_5years', 'department_accounting', 'department_hr', 'department_marketing', 'department_sales', 'department_support', 'salary_low', 'salary_medium']
+
+    data_set = dataset.loc[:, dataset.columns.isin(cols)]
+    check=list(set(cols).difference(set(data_set.columns)))
+    for i in check:
+        data_set[i] = 0
+    #data_set[list(set(cols).difference(set(data_set.columns)))] = 0
+    data_set = data_set.reindex(columns=cols)
+    data_set['name'] = dataset['name']
+
+    X_test = data_set.loc[:, data_set.columns != 'name'].values
+
+    with open('model.pkl', 'rb') as f:
+        rf = cPickle.load(f)
+
+    y_pred = rf.predict(X_test)
+
+    d = {1:[], 0:[]}
+    for i in range(len(y_pred)):
+        d[y_pred[i]].append(data_set.loc[i, 'name'])
+
+    with open('out.json', 'w') as json_file:
+        json.dump(d, json_file)
+        
 @app.route("/multiple", methods=['GET','POST'])
 def multiple():
     if request.method == 'POST':
