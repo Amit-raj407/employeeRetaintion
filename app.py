@@ -1,6 +1,7 @@
 import os
 from flask import Flask, render_template, request, redirect
 import numpy as np
+import pandas as pd
 import _pickle as cPickle
 import json
 from werkzeug.utils import secure_filename
@@ -25,8 +26,8 @@ def index():
         pass
     return render_template('index.html')
 
-def func2():
-    dataset = pd.read_excel("./csv_files/book.xlsx")
+def func2(filename):
+    dataset = pd.read_excel("./csv_files/"+filename)
 
     dataset = dataset.rename(columns = {'sales':'department'})
     dataset['department']=np.where(dataset['department'] =='IT', 'technical', dataset['department'])
@@ -71,7 +72,15 @@ def multiple():
         if f and allowed_file(f.filename):
             filename = secure_filename(f.filename)
             f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return "SUCCESS"
+            print(filename)
+            func2(filename)
+            # return "SUCCESS"
+            with open("out.json") as file:
+                json_object = json.loads(file.read())
+            print(json_object["1"])
+            total = (len(json_object["1"])+len(json_object["0"]))
+            perc = (len(json_object["1"])/total) * 100
+            return render_template("multiresult.html",perc = perc,len = len(json_object["1"]), data=json_object["1"])
     return render_template('multiple.html')
 
 def func():
