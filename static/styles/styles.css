@@ -79,6 +79,18 @@ html, body {
  a {
      text-decoration: none;
  }
+
+
+ .table {
+    border-collapse: collapse;
+    width: 30%;
+    margin-left: auto;
+    margin-right: auto;
+    /* margin-top: 20px; */
+    text-align: center;
+  }
+  
+  
  
  @media screen and (max-width: 480px) {
      .container {

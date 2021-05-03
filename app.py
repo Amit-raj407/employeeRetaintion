@@ -5,6 +5,7 @@ import pandas as pd
 import _pickle as cPickle
 import json
 from werkzeug.utils import secure_filename
+import pyautogui, time
 
 app = Flask(__name__)
 
@@ -125,6 +126,15 @@ def predict():
         str = "Leave"
     return render_template("result.html",name=data["Name"],result=str)
     # return "Data Saved"
+
+@app.route("/printPage", methods=['GET','POST'])
+def printPage():
+    pyautogui.hotkey('ctrl', 'p')
+    time.sleep(10)
+    pyautogui.press('enter')
+    time.sleep(10)
+    return render_template('multiple.html')
+
 
 
 if __name__ == "__main__":
