@@ -1,10 +1,11 @@
-
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@500&display=swap');
 html, body {
     height: 100%;
  }
  
  * {
      box-sizing: border-box;
+     font-family: 'Lexend', sans-serif;
  }
  
  .container {
@@ -15,7 +16,7 @@ html, body {
      position: absolute;
      top: 50%;
      left: 50%;
-     transform: translate(-50%, -60%);
+     transform: translate(-50%, -55%);
      z-index: 2;
      width: 80%;
      padding: 20px;
@@ -49,22 +50,12 @@ html, body {
  }
  
  
- input[type=text], input[type=number], select {
+ /* input[type=text], input[type=number], select {
      width: 100%;
      margin: 10px;
      padding: 5px 15px;
      height: 40px;
- }
- 
- select {
-     margin-top: 35em;
- }
- 
- #dropdown {
-     padding-top: 10px;
-     /* border: 2px solid red; */
- }
- 
+ } */
  
  
  .range-span {
@@ -72,6 +63,7 @@ html, body {
      margin-right: auto;
      text-align: center;
      width: 20%;
+     padding: 10px;
  }
  
  
@@ -82,4 +74,29 @@ html, body {
  
  .btn {
      width: 10em;
+ }
+
+ a {
+     text-decoration: none;
+ }
+
+
+ .table {
+    border-collapse: collapse;
+    width: 30%;
+    margin-left: auto;
+    margin-right: auto;
+    /* margin-top: 20px; */
+    text-align: center;
+  }
+  
+  
+ 
+ @media screen and (max-width: 480px) {
+     .container {
+        transform: translate(-50%, 200%);
+     }
+     .slider {
+         padding: 20px;
+     }
  }
