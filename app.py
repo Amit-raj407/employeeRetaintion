@@ -27,6 +27,11 @@ def index():
         pass
     return render_template('index.html')
 
+
+# Function func2 takes the csv filename as parameter and
+# converts it to a json file and then predicts the retention 
+# of multiple users, classifies them and saves them in a new json file.
+
 def func2(filename):
     dataset = pd.read_excel("./csv_files/"+filename)
 
@@ -84,6 +89,10 @@ def multiple():
             return render_template("multiresult.html",perc = perc,len = len(json_object["1"]), data=json_object["1"])
     return render_template('multiple.html')
 
+
+# Function func used to open the json file and map it to the columns of
+# of dataset and predict the retention
+
 def func():
     with open('model.pkl', 'rb') as f:
         rf = cPickle.load(f)
@@ -125,7 +134,10 @@ def predict():
     else:
         str = "Leave"
     return render_template("result.html",name=data["Name"],result=str)
-    # return "Data Saved"
+
+
+# Code Snippet used to automate the printing of result page
+# using pyautogui
 
 @app.route("/printPage", methods=['GET','POST'])
 def printPage():
